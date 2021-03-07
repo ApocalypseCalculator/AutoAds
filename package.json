@@ -5,6 +5,7 @@
   "bin": "bin.js",
   "main": "index.js",
   "dependencies": {
+    "chalk": "^4.1.0",
     "puppeteer-core": "^8.0.0"
   },
   "devDependencies": {},
