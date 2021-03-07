@@ -1,0 +1,30 @@
+{
+  "name": "autoads",
+  "version": "0.0.1",
+  "description": "A simple ad automation app for Politics & War",
+  "bin": "bin.js",
+  "main": "index.js",
+  "dependencies": {
+    "puppeteer-core": "^8.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Orbis-Software-Services/AutoAds.git"
+  },
+  "keywords": [
+    "Ad",
+    "Politics",
+    "and",
+    "War"
+  ],
+  "author": "ApocalypseCalculator",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Orbis-Software-Services/AutoAds/issues"
+  },
+  "homepage": "https://github.com/Orbis-Software-Services/AutoAds#readme"
+}
