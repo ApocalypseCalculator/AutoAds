@@ -20,7 +20,6 @@ async function d(email, pass) {
         parsed.chrome = '';
         let newraw = JSON.stringify(parsed);
         fs.writeFileSync('./data.json', newraw);
-        console.log(err);
         process.exit(0);
     })
     console.log(chalk.green('Logging in...'));
@@ -51,9 +50,9 @@ async function d(email, pass) {
                     }, 1000);
                     setTimeout(async function () {
                         await (await page).click("#btnAds");
-                        console.log(chalk.green('Started ad playback... process will automatically exit in 1 minute'));
+                        console.log(chalk.green(`Started ad playback... process will automatically exit in ${ADLENGTH / (60 * 1000)} minute(s)`));
                         resolve();
-                    }, 2000);
+                    }, 2500);
                 })
             }
             await click();
