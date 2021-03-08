@@ -2,9 +2,11 @@
 Automate ad rewards with this simple Node.js app. Nearly undetectable but use at your own risk. 
 
 
-## Work in progress
+## Information
 
 This uses puppeteer, an automation library that works on top of Chrome/Chromium browsers.
+
+For a complete guide to using it, go to [here](https://github.com/Orbis-Software-Services/AutoAds/blob/main/guide.md)
 
 ## Requirements
 
@@ -14,3 +16,8 @@ This will *not* work on Safari or Firefox.
 - Half a brain cell and the ability to follow instructions. 
 
 NOTE: if you are using the basic Chromium, it may not be able to play back video. 
+
+## Coming Soon
+- Support for MacOS and Linux
+- Automatically watching all 8 videos w/ 3 min pauses in between 
+- Storing credentials locally (probably a terrible idea lol)
