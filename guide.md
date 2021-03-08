@@ -13,9 +13,9 @@ interface.
 
 Using the `cd` command, navigate to your folder containing the .exe file you just downloaded.
 
-E.g. if my .exe file was in `C:/Users/myusername/Desktop/autoads` then I would do
+E.g. if my .exe file was in `C:/Users/myusername/Desktop/autoads/` then I would do
 ```
-cd C:/Users/myusername/Desktop
+cd C:/Users/myusername/Desktop/autoads/
 ```
 Then run the command
 ```
