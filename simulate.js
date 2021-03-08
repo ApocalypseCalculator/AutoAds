@@ -60,7 +60,7 @@ async function d(email, pass) {
             function sleep() {
                 return new Promise(resolve => {
                     setTimeout(async function () {
-                        console.log(chalk.green('Finished. Check your rewarded ads page at https://politicsandwar.com/rewarded-ads/ to see if you\'ve received your reward'));
+                        console.log(chalk.green('Finished. Check your rewarded ads page at https://politicsandwar.com/rewarded-ads/ to see if you\'ve received your reward.\nRemember to wait at least 3 minutes to watch another ad'));
                         process.exit(0);
                     }, ADLENGTH);
                 })
