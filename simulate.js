@@ -50,21 +50,28 @@ async function d(email, pass) {
                     }, 1000);
                     setTimeout(async function () {
                         await (await page).click("#btnAds");
-                        console.log(chalk.green(`Started ad playback... process will automatically exit in ${ADLENGTH / (60 * 1000)} minute(s)`));
+                        console.log(chalk.green(`Started ad playback...`));
                         resolve();
                     }, 2500);
                 })
             }
             await click();
-            function sleep() {
+            function countdown() {
+                let left = ADLENGTH / 1000;
                 return new Promise(resolve => {
-                    setTimeout(async function () {
-                        console.log(chalk.green('Finished. Check your rewarded ads page at https://politicsandwar.com/rewarded-ads/ to see if you\'ve received your reward.\nRemember to wait at least 3 minutes to watch another ad'));
-                        process.exit(0);
-                    }, ADLENGTH);
+                    let handle = setInterval(async function () {
+                        process.stdout.cursorTo(0);
+                        process.stdout.write(chalk.green(`Process will automatically exit in ${left} seconds`));
+                        left--;
+                        if (left <= 0) {
+                            clearInterval(handle);
+                            console.log('\n\n' + chalk.green('Finished. Check your rewarded ads page at https://politicsandwar.com/rewarded-ads/ to see if you\'ve received your reward.\nRemember to wait at least 3 minutes to watch another ad'));
+                            process.exit(0);
+                        }
+                    }, 1000)
                 })
             }
-            await sleep();
+            await countdown();
         }
     }
 }
