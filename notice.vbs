@@ -1,0 +1,1 @@
+MsgBox "Please run this program in your terminal with the flag --start"
