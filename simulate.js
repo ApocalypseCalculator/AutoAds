@@ -29,13 +29,16 @@ async function d(email, pass) {
     await (await page).type("input[name='password']", `${pass}`);
     await (await page).click("input[name='loginform']");
     await (await page).waitForNavigation();
-    console.log(chalk.green('Logged in successfully...accessing rewarded ads page now'));
-    await (await page).goto("https://politicsandwar.com/rewarded-ads/", { waitUntil: "load" });
-    if (await (await (await page).content()).toLowerCase().includes('fail')) {
+    if (await (await (await page).content()).toLowerCase().includes('fail') || await (await (await page).content()).toLowerCase().includes('incorrect')) {
         console.log(chalk.red('Login failed'));
+        parsed.email = '';
+        let newraw = JSON.stringify(parsed);
+        fs.writeFileSync('./data.json', newraw);
         process.exit(0);
     }
     else {
+        console.log(chalk.green('Logged in successfully...accessing rewarded ads page now'));
+        await (await page).goto("https://politicsandwar.com/rewarded-ads/", { waitUntil: "load" });
         console.log(chalk.green('Loaded rewarded ads page...'));
         if ((await page).url().includes(HUMAN)) {
             console.log(chalk.yellow(`Human verification encountered. Please verify at ${HUMAN}/`));
@@ -61,7 +64,7 @@ async function d(email, pass) {
                 return new Promise(resolve => {
                     let handle = setInterval(async function () {
                         process.stdout.cursorTo(0);
-                        process.stdout.write(chalk.green(`Process will automatically exit in ${left} seconds`));
+                        process.stdout.write(chalk.green(`Process will automatically exit in ${left} seconds\t`));
                         left--;
                         if (left <= 0) {
                             clearInterval(handle);
