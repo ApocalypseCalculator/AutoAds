@@ -36,25 +36,34 @@ else {
 
 async function next() {
     console.log(chalk.green('\nLogin time!\n'))
-    console.log(`Enter your email: `);
-    rl.question('', (email) => { //i have no fucking clue why rl.question doesnt print properly
-        if(/[0-9a-zA-Z]{1,100}@[0-9a-zA-Z]{1,100}/.test(email)){
-            nextnext(email);
-        }
-        else{
-            console.log(chalk.yellow('Invalid email'));
-            next();
-        }
-    })
+    if (!parsed.email || parsed.email == '') {
+        console.log(`Enter your email: `);
+        rl.question('', (email) => { //i have no fucking clue why rl.question doesnt print properly
+            if (/[0-9a-zA-Z]{1,100}@[0-9a-zA-Z]{1,100}/.test(email)) {
+                parsed.email = email;
+                let newraw = JSON.stringify(parsed);
+                fs.writeFileSync('./data.json', newraw);
+                nextnext(email);
+            }
+            else {
+                console.log(chalk.yellow('Invalid email'));
+                next();
+            }
+        })
+    }
+    else {
+        console.log(chalk.green(`Using email ${parsed.email}`));
+        nextnext(parsed.email)
+    }
 }
 
 async function nextnext(email) {
     console.log('\nEnter your password: ');
     rl.question('', (password) => {
-        if(password.length > 0 && password !== ''){
+        if (password.length > 0 && password !== '') {
             require('./simulate').d(email, password);
         }
-        else{
+        else {
             console.log(chalk.yellow('Invalid password'));
             nextnext(email);
         }
