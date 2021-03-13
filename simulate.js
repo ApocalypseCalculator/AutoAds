@@ -69,7 +69,7 @@ async function d(email, pass) {
                         if (left <= 0) {
                             clearInterval(handle);
                             console.log('\n\n' + chalk.green('Finished. Check your rewarded ads page at https://politicsandwar.com/rewarded-ads/ to see if you\'ve received your reward.\nRemember to wait at least 3 minutes to watch another ad'));
-                            process.exit(0);
+                            resolve();
                         }
                     }, 1000)
                 })

@@ -57,11 +57,25 @@ async function next() {
     }
 }
 
+var counter = 2;
+
 async function nextnext(email) {
     console.log('\nEnter your password: ');
     rl.question('', (password) => {
         if (password.length > 0 && password !== '') {
-            require('./simulate').d(email, password);
+            console.log(chalk.green(`\nStarting round 1`));
+            require('./simulate').d(email, password).then(() => {
+                setInterval(function () {
+                    console.log(chalk.green(`\nStarting round ${counter}`));
+                    require('./simulate').d(email, password).then(() => {
+                        counter++;
+                        if (counter >= 25) {
+                            console.log(chalk.greenBright("\nWatched 25 ads. You've reached your max amount of earnings. Hooray!"));
+                            process.exit(0);
+                        }
+                    })
+                }, 5 * 60 * 1000);
+            })
         }
         else {
             console.log(chalk.yellow('Invalid password'));
