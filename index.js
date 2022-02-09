@@ -17,21 +17,32 @@ if (fs.existsSync(parsed.chrome)) {
     next();
 }
 else {
-    console.log(chalk.yellow('I did not find a Chrome/Chromium executable, please choose one: '));
-    const select = spawn('cmd.exe', ['/c', 'selector.bat']);
-    select.stdout.on('data', (data) => {
-        let path = data.toString();
-        if (/:\\/.test(path)) {
-            parsed.chrome = path.replace('\n', '').replace('\r', '').replace(/\\/g, '/');
-            let newraw = JSON.stringify(parsed);
-            fs.writeFileSync('./data.json', newraw);
-            next();
-        }
-        else {
-            console.log(chalk.red('Operation cancelled.'));
-            process.exit(0);
-        }
-    })
+    let detectPath = testDefaultChrome();
+    console.log(detectPath);
+    if (!detectPath) {
+        console.log(chalk.yellow('I did not find a Chrome/Chromium executable, please choose one: '));
+        const select = spawn('cmd.exe', ['/c', 'selector.bat']);
+        select.stdout.on('data', (data) => {
+            let path = data.toString();
+            if (/:\\/.test(path)) {
+                parsed.chrome = path.replace('\n', '').replace('\r', '').replace(/\\/g, '/');
+                let newraw = JSON.stringify(parsed);
+                fs.writeFileSync('./data.json', newraw);
+                next();
+            }
+            else {
+                console.log(chalk.red('Operation cancelled.'));
+                process.exit(0);
+            }
+        })
+    }
+    else {
+        console.log(chalk.green('Detected Chrome/Chromium executable...'));
+        parsed.chrome = detectPath.replace('\n', '').replace('\r', '').replace(/\\/g, '/');
+        let newraw = JSON.stringify(parsed);
+        fs.writeFileSync('./data.json', newraw);
+        next();
+    }
 }
 
 async function next() {
@@ -82,4 +93,21 @@ async function nextnext(email) {
             nextnext(email);
         }
     })
+}
+
+function testDefaultChrome() {
+    let possibleLocations = [
+        `${process.env.PROGRAMFILES}\\Google\\Chrome\\Application\\chrome.exe`,
+        `${process.env['ProgramFiles(x86)']}\\Google\\Chrome\\Application\\chrome.exe`,
+        `${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`,
+        `${process.env['ProgramFiles(x86)']}\\Microsoft\\Edge\\Application\\msedge.exe`
+    ];
+    for (let i = 0; i < possibleLocations.length; i++) {
+        if (fs.existsSync(possibleLocations[i])) {
+            return possibleLocations[i];
+        }
+        else if (i == possibleLocations.length-1) {
+            return false;
+        }
+    }
 }
