@@ -11,7 +11,7 @@ if (!fs.existsSync('./data.json')) {
 let raw = fs.readFileSync('./data.json');
 let parsed = JSON.parse(raw);
 
-let rl = readline.createInterface({ input: process.stdin });
+let rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
 if (fs.existsSync(parsed.chrome)) {
     next();
@@ -72,9 +72,11 @@ var counter = 2;
 
 async function nextnext(email) {
     console.log('\nEnter your password: ');
+    rl.stdoutMuted = true;
     rl.question('', (password) => {
+        rl.stdoutMuted = false;
         if (password.length > 0 && password !== '') {
-            console.log(chalk.green(`\nStarting round 1`));
+            console.log(chalk.green(`\n\nStarting round 1`));
             require('./simulate').d(email, password).then(() => {
                 setInterval(function () {
                     console.log(chalk.green(`\nStarting round ${counter}`));
@@ -89,7 +91,7 @@ async function nextnext(email) {
             })
         }
         else {
-            console.log(chalk.yellow('Invalid password'));
+            console.log(chalk.yellow('\nInvalid password'));
             nextnext(email);
         }
     })
@@ -106,8 +108,17 @@ function testDefaultChrome() {
         if (fs.existsSync(possibleLocations[i])) {
             return possibleLocations[i];
         }
-        else if (i == possibleLocations.length-1) {
+        else if (i == possibleLocations.length - 1) {
             return false;
         }
     }
 }
+
+rl._writeToOutput = function _writeToOutput(stringToWrite) {
+    if (rl.stdoutMuted) {
+        rl.output.write("*");
+    }
+    else {
+        rl.output.write(stringToWrite);
+    }
+};
