@@ -96,7 +96,9 @@ function testDefaultChrome() {
         `${process.env.PROGRAMFILES}\\Google\\Chrome\\Application\\chrome.exe`,
         `${process.env['ProgramFiles(x86)']}\\Google\\Chrome\\Application\\chrome.exe`,
         `${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`,
-        `${process.env['ProgramFiles(x86)']}\\Microsoft\\Edge\\Application\\msedge.exe`
+        `${process.env['ProgramFiles(x86)']}\\Microsoft\\Edge\\Application\\msedge.exe`,
+        `${process.env.PROGRAMFILES}\\Opera\\Launcher.exe`,
+        `${process.env.LOCALAPPDATA}\\Vivaldi\\Application\\vivaldi.exe`
     ];
     for (let i = 0; i < possibleLocations.length; i++) {
         if (fs.existsSync(possibleLocations[i])) {
