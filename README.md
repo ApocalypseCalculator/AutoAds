@@ -19,4 +19,3 @@ NOTE: if you are using the basic Chromium, it may not be able to play back video
 
 ## Coming Soon
 - Support for MacOS and Linux
-- Storing credentials locally (probably a terrible idea lol)
