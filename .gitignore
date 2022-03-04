@@ -1,3 +1,7 @@
+# Private files
+data.json
+selector.bat
+
 # Logs
 logs
 *.log
