@@ -3,11 +3,6 @@ const fs = require('fs');
 const chalk = require('chalk');
 const { spawn } = require('child_process');
 
-if (!fs.existsSync('./data.json')) {
-    console.log(chalk.red('Missing data.json file'));
-    process.exit(0);
-}
-
 let raw = fs.readFileSync('./data.json');
 let parsed = JSON.parse(raw);
 
@@ -18,7 +13,6 @@ if (fs.existsSync(parsed.chrome)) {
 }
 else {
     let detectPath = testDefaultChrome();
-    console.log(detectPath);
     if (!detectPath) {
         console.log(chalk.yellow('I did not find a Chrome/Chromium executable, please choose one: '));
         const select = spawn('cmd.exe', ['/c', 'selector.bat']);
