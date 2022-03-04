@@ -2,7 +2,11 @@ const readline = require('readline');
 const fs = require('fs');
 const chalk = require('chalk');
 const { spawn } = require('child_process');
+const nmi = require('node-machine-id');
 
+const cipher = require('./cipher');
+
+const machineid = nmi.machineIdSync();
 let raw = fs.readFileSync('./data.json');
 let parsed = JSON.parse(raw);
 
@@ -62,32 +66,47 @@ async function next() {
     }
 }
 
+async function nextnext(email) {
+    if (parsed.password && parsed.password !== '') {
+        console.log(chalk.green(`Using encrypted password`));
+        let pwd = cipher.decrypt(parsed.password, machineid);
+        startSim(email, pwd);
+    }
+    else {
+        console.log('\nEnter your password: ');
+        rl.stdoutMuted = true;
+        rl.question('', (password) => {
+            rl.stdoutMuted = false;
+            if (password.length > 0 && password !== '') {
+                let encrypted = cipher.encrypt(password, machineid);
+                parsed.password = encrypted;
+                let newraw = JSON.stringify(parsed);
+                fs.writeFileSync('./data.json', newraw);
+                startSim(email, password);
+            }
+            else {
+                console.log(chalk.yellow('\nInvalid password'));
+                nextnext(email);
+            }
+        })
+    }
+}
+
 var counter = 2;
 
-async function nextnext(email) {
-    console.log('\nEnter your password: ');
-    rl.stdoutMuted = true;
-    rl.question('', (password) => {
-        rl.stdoutMuted = false;
-        if (password.length > 0 && password !== '') {
-            console.log(chalk.green(`\n\nStarting round 1`));
+async function startSim(email, password) {
+    console.log(chalk.green(`\n\nStarting round 1`));
+    require('./simulate').d(email, password).then(() => {
+        setInterval(function () {
+            console.log(chalk.green(`\nStarting round ${counter}`));
             require('./simulate').d(email, password).then(() => {
-                setInterval(function () {
-                    console.log(chalk.green(`\nStarting round ${counter}`));
-                    require('./simulate').d(email, password).then(() => {
-                        counter++;
-                        if (counter >= 25) {
-                            console.log(chalk.greenBright("\nWatched 25 ads. You've reached your max amount of earnings. Hooray!"));
-                            process.exit(0);
-                        }
-                    })
-                }, 5 * 60 * 1000);
+                counter++;
+                if (counter >= 25) {
+                    console.log(chalk.greenBright("\nWatched 25 ads. You've reached your max amount of earnings. Hooray!"));
+                    process.exit(0);
+                }
             })
-        }
-        else {
-            console.log(chalk.yellow('\nInvalid password'));
-            nextnext(email);
-        }
+        }, 5 * 60 * 1000);
     })
 }
 

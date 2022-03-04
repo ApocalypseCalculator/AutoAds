@@ -32,6 +32,7 @@ async function d(email, pass) {
     if (await (await (await page).content()).toLowerCase().includes('fail') || await (await (await page).content()).toLowerCase().includes('incorrect')) {
         console.log(chalk.red('Login failed'));
         parsed.email = '';
+        parsed.password = '';
         let newraw = JSON.stringify(parsed);
         fs.writeFileSync('./data.json', newraw);
         process.exit(0);
